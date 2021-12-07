@@ -17,7 +17,6 @@ fun main() {
         .map { it.reduce { sum, b -> sum + b } }
         .reduce { sum, b -> sum + b }
 
-
     fun removeDrawnNumbers(numbers: List<List<Int>>, numbersToRemove: MutableList<Int>): List<List<Int>> {
         return numbers.map {
             it.filter {
@@ -71,56 +70,56 @@ fun main() {
         return -1
     }
 
-//    fun part2(input: List<String>): Int {
-//        val bingoNumbers = getBingoNumbers(input[0])
-//        val bingoBoards = getBingoBoards(input.subList(1, input.size)).toMutableList()
-//        val rowLength = bingoBoards[0][0].size
-//        val colLength = bingoBoards[0].size
-//        val drawnNumbers = mutableListOf<Int>()
-//
-//        bingoNumbers.forEach {
-//            val drawnNumber = it
-//            drawnNumbers.add(drawnNumber)
-//            val bingoBoardsWithoutDrawnNumbers = bingoBoards.map {
-//                it.map {
-//                    it.filter {
-//                        val bingoNumber = it
-//                        !drawnNumbers.any { bingoNumber == it }
-//                    }
-//                }.filter { it.isNotEmpty() }
-//            }
-//            for (bingoBoardsWithoutDrawnNumber in bingoBoardsWithoutDrawnNumbers) {
-//
-//                if (bingoBoardsWithoutDrawnNumber.size != rowLength) {
-//                    if (bingoBoards.size > 1) {
-//                        bingoBoards.removeAt(bingoBoardsWithoutDrawnNumbers.indexOf(bingoBoardsWithoutDrawnNumber))
-//                        break
-//                    }
-//                    return sum(bingoBoardsWithoutDrawnNumber) * drawnNumber
-//                }
-//            }
-//
-//            outer@ for (bingoBoard in bingoBoards) {
-//                for (colIndex in Array(rowLength) { it }) {
-//                    var matchedNumbers = 0
-//                    for (rowIndex in Array(colLength) { it }) {
-//                        if (drawnNumbers.any { bingoBoard[rowIndex][colIndex] == it }) {
-//                            matchedNumbers++
-//                        }
-//                    }
-//                    if (matchedNumbers == colLength) {
-//                        if (bingoBoards.size > 1) {
-//                            bingoBoards.remove(bingoBoard)
-//                            break@outer
-//                        }
-//                        return sum(removeDrawnNumbers(bingoBoard, drawnNumbers)) * drawnNumber
-//                    }
-//                }
-//            }
-//        }
-//
-//        return -1
-//    }
+    fun part2(input: List<String>): Int {
+        val bingoNumbers = getBingoNumbers(input[0])
+        val bingoBoards = getBingoBoards(input.subList(1, input.size)).toMutableList()
+        val rowLength = bingoBoards[0][0].size
+        val colLength = bingoBoards[0].size
+        val drawnNumbers = mutableListOf<Int>()
+
+        bingoNumbers.forEach {
+            val drawnNumber = it
+            drawnNumbers.add(drawnNumber)
+            val bingoBoardsWithoutDrawnNumbers = bingoBoards.map {
+                it.map {
+                    it.filter {
+                        val bingoNumber = it
+                        !drawnNumbers.any { bingoNumber == it }
+                    }
+                }
+                    .filter { it.isNotEmpty() }
+            }.toMutableList()
+            for (bingoBoardsWithoutDrawnNumber in bingoBoardsWithoutDrawnNumbers.toList()) {
+                if (bingoBoardsWithoutDrawnNumber.size != rowLength) {
+                    if (bingoBoards.size > 1) {
+                        val index = bingoBoardsWithoutDrawnNumbers.indexOf(bingoBoardsWithoutDrawnNumber)
+                        bingoBoards.removeAt(index)
+                        bingoBoardsWithoutDrawnNumbers.removeAt(index)
+                    } else {
+                        return sum(bingoBoardsWithoutDrawnNumber) * drawnNumber
+                    }
+                }
+            }
+            for (currentBingoBoard in bingoBoards.toList()) {
+                for (colIndex in Array(rowLength) { it }) {
+                    val matchedNumbers = Array(colLength) { it }.filter {
+                        val rowIndex = it
+                        drawnNumbers.any { currentBingoBoard[rowIndex][colIndex] == it }
+                    }
+                        .count()
+                    if (matchedNumbers == colLength) {
+                        if (bingoBoards.size > 1) {
+                            bingoBoards.remove(currentBingoBoard)
+                        } else {
+                            return sum(removeDrawnNumbers(currentBingoBoard, drawnNumbers)) * drawnNumber
+                        }
+                    }
+                }
+            }
+        }
+
+        return -1
+    }
 
     val input = readInput("day-$DAY")
     val testInput = readInput("day-$DAY-test")
@@ -130,8 +129,7 @@ fun main() {
     check(part1(testInputColWin) == 220)
     println("Part 1 answer: ${part1(input)}")
 
-//    check(part2(testInput) == 1924)
-//    check(part2(testInputColWin) == 483)
-//    println("Part 2 answer: ${part2(input)}")
+    check(part2(testInput) == 1924)
+    check(part2(testInputColWin) == 483)
+    println("Part 2 answer: ${part2(input)}")
 }
-
