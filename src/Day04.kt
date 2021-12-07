@@ -1,5 +1,3 @@
-const val DAY = "04"
-
 fun main() {
     fun getBingoBoards(boards: List<String>) = boards
         .filter { it.isNotEmpty() }
@@ -121,9 +119,10 @@ fun main() {
         return -1
     }
 
-    val input = readInput("day-$DAY")
-    val testInput = readInput("day-$DAY-test")
-    val testInputColWin = readInput("day-$DAY-test-col-win")
+    val day = "04"
+    val input = readInput("day-$day")
+    val testInput = readInput("day-$day-test")
+    val testInputColWin = readInput("day-$day-test-col-win")
 
     check(part1(testInput) == 4512)
     check(part1(testInputColWin) == 220)
