@@ -14,7 +14,6 @@ fun main() {
         for (day in 1..days) {
             val currentFishByTimer = fishByTimer.toMutableMap()
             for (number in 7L downTo 0L) {
-
                 if (number == 0L) {
                     val newFish = currentFishByTimer.getOrDefault(0L, 0L);
                     fishByTimer[6L] = currentFishByTimer.getOrDefault(7L, 0L) + newFish
